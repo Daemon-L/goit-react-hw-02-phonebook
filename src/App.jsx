@@ -1,15 +1,11 @@
 import { Component } from 'react';
+import { nanoid } from 'nanoid';
 
 import ContactForm from './components/ContactForm/ContactForm';
 import ContactList from './components/ContactList/ContactList';
 import Filter from './components/ContactsFilter/Filter';
 
 class App extends Component { 
-
-    // state = {
-    //     contacts: [],
-    //     name: ''
-    // }
 
     state = {
         contacts: [
@@ -23,24 +19,60 @@ class App extends Component {
         number: ''
     }
 
+    formSubmitHandler = data => {
+
+        const normalizedContact = data.name.toLowerCase();
+        const newName = this.state.contacts.map(
+            item => item.name.toLowerCase() === normalizedContact,
+        );
+
+        if (newName.includes(true)) {
+            alert(`${data.name} is already in contacts`);
+        } else {
+
+            const contact = {
+                id: nanoid(),
+                name: data.name,
+                number: data.number,
+            }
+
+            this.setState(({ contacts }) => ({
+                contacts: [contact, ...contacts],
+            }));
+        }
+    };
+
+    changeFilter = (evt) => {
+        this.setState({ filter: evt.currentTarget.value });
+    };
+
+    getVisibleContacts = () => {
+        const { filter } = this.state
+        const normalizedFilter = filter.toLowerCase();
+        return this.state.contacts.filter(contact =>
+            contact.name.toLowerCase().includes(normalizedFilter),
+        );
+    };
+    
     deleteContact = (contactId) => {
-        this.setState(prevState => ({
-            contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+        this.setState(({contacts}) => ({
+            contacts: contacts.filter(contact => contact.id !== contactId),
         }));
     };
 
 
     render() { 
+        const { filter } = this.state
+        const visibleContacts = this.getVisibleContacts();
 
-        const { contacts } = this.state
         return (
             <div>
                 <h1>Phonebook</h1>
-                <ContactForm />
+                <ContactForm onSubmit={this.formSubmitHandler}/>
 
                 <h2>Contacts</h2>
-                <Filter />
-                <ContactList contacts={contacts} onDeleteContact = {this.deleteContact} />
+                <Filter value={filter} onChange={this.changeFilter}/>
+                <ContactList contacts={visibleContacts} onDeleteContact = {this.deleteContact} />
             </div>
         );
     }
