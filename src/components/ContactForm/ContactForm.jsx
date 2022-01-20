@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { FormContainer, Text, Input, Button } from './Form.styled'
 
 class ContactForm extends Component { 
@@ -27,10 +26,13 @@ class ContactForm extends Component {
         this.setState({ name: '', number: '' });
     };
 
+    static propTypes = {
+        onSubmit: PropTypes.func.isRequired,
+    };
+
     render() { 
         return (
             <FormContainer onSubmit={this.handleSubmit}>
-                
                 <label>
                     <Text>Name</Text>
                     <Input
@@ -43,7 +45,6 @@ class ContactForm extends Component {
                         required
                     />  
                 </label>
-
                 <label>
                     <Text>Number</Text>
                     <Input
@@ -56,15 +57,14 @@ class ContactForm extends Component {
                         required
                     />
                 </label>
-                
                 <Button type="submit">Add contact</Button>
             </FormContainer>
         );
     }
 }
 
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
+// ContactForm.propTypes = {
+//   onSubmit: PropTypes.func.isRequired,
+// };
 
 export default ContactForm;
