@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { nanoid } from 'nanoid';
 
 import ContactForm from './components/ContactForm/ContactForm';
-import ContactList from './components/ContactList/ContactList';
+import ContactList from './components/ContactList/ConyactList';
 import Filter from './components/ContactsFilter/Filter';
 
 import { Container } from './App.styled'
@@ -77,5 +77,4 @@ class App extends Component {
         );
     }
 }
-
 export default App;
